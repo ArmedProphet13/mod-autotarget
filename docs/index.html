@@ -240,8 +240,76 @@
     </div>
   </section>
 
-  <!-- 7. Compatibility -->
-  <section class="section section--alt" id="compat">
+  <!-- 7. Safety -->
+  <section class="section section--alt" id="safety">
+    <div class="section__inner">
+      <p class="eyebrow">Safety</p>
+      <h2 class="section__title">Why a DLL, and how to verify it</h2>
+      <div class="safety">
+
+        <article class="safety__card">
+          <h3 class="safety__heading">Technical Architecture: Why a DLL?</h3>
+          <p>
+            Standard WoW addons are written in Lua and operate within a
+            strict, sandboxed environment. While they can modify UI frames
+            and monitor combat logs, they are entirely blocked from
+            accessing or altering the core targeting engine. That logic
+            resides deep within the compiled C++ executable, far beyond
+            the reach of the Lua API.
+          </p>
+          <p>
+            Because true action targeting requires modifying these core
+            routines, a traditional addon is mechanically insufficient.
+          </p>
+          <p>
+            AutoTarget is engineered as a lightweight
+            <code class="code--inline">version.dll</code> library. It loads
+            alongside <code class="code--inline">Wow.exe</code> at runtime,
+            safely hooking into the client's internal targeting and
+            casting routines.
+          </p>
+        </article>
+
+        <article class="safety__card">
+          <h3 class="safety__heading">How to verify the file you downloaded</h3>
+          <p>
+            Every release on the
+            <a href="https://github.com/ArmedProphet13/mod-autotarget/releases" rel="noopener">Releases page</a>
+            ships with a SHA-256 hash. Think of it as a fingerprint of
+            the .zip — change one byte and the fingerprint changes
+            completely. If the hash of your download matches the one
+            published with the release, you're holding exactly the file
+            we shipped.
+          </p>
+          <p>Check it on Windows from any folder, no extra tool needed:</p>
+          <div class="code-block">
+            <pre><code id="sha-cmd">certutil -hashfile AutoTarget-v0.3.5.zip SHA256</code></pre>
+            <button class="copy-btn" data-copy-target="sha-cmd" aria-label="Copy command">Copy</button>
+          </div>
+          <p>
+            Compare the output to the hash on the release page. They
+            should match exactly.
+          </p>
+          <p>
+            A matching hash proves the file wasn't changed between us
+            publishing it and you opening it. It does <em>not</em> prove
+            the published file is safe — for that, the source has to be
+            readable. It is:
+            <a href="https://github.com/ArmedProphet13/mod-autotarget/tree/master/client/src" rel="noopener">browse the code</a>,
+            or build it yourself with
+            <code class="code--inline">cmake --build .</code> from the
+            <code class="code--inline">client/</code> folder. The DLL your
+            build produces should be functionally identical to the one in
+            the release.
+          </p>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Compatibility -->
+  <section class="section" id="compat">
     <div class="section__inner">
       <p class="eyebrow">Compatibility</p>
       <h2 class="section__title">Versions</h2>
