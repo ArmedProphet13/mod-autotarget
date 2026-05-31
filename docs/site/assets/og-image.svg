@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="35%" cy="40%" r="55%">
+      <stop offset="0%"  stop-color="#e8c170" stop-opacity="0.18"/>
+      <stop offset="65%" stop-color="#e8c170" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bgGlow" cx="85%" cy="20%" r="80%">
+      <stop offset="0%"  stop-color="#73bed3" stop-opacity="0.12"/>
+      <stop offset="60%" stop-color="#73bed3" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="goldGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#e8c170"/>
+      <stop offset="100%" stop-color="#de9e41"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="#090a14"/>
+  <rect width="1200" height="630" fill="url(#bgGlow)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Reticle on left, big -->
+  <g transform="translate(180, 315)">
+    <circle r="90" fill="none" stroke="#e8c170" stroke-width="5"/>
+    <line x1="-130" y1="0" x2="-108" y2="0" stroke="#e8c170" stroke-width="5" stroke-linecap="round"/>
+    <line x1="108"  y1="0" x2="130"  y2="0" stroke="#e8c170" stroke-width="5" stroke-linecap="round"/>
+    <line x1="0" y1="-130" x2="0" y2="-108" stroke="#e8c170" stroke-width="5" stroke-linecap="round"/>
+    <line x1="0" y1="108"  x2="0" y2="130"  stroke="#e8c170" stroke-width="5" stroke-linecap="round"/>
+    <circle r="14" fill="#e8c170"/>
+  </g>
+
+  <!-- Wordmark -->
+  <g transform="translate(360, 270)">
+    <text x="0" y="0"
+          font-family="'Space Grotesk', Inter, system-ui, sans-serif"
+          font-size="120" letter-spacing="-3">
+      <tspan font-weight="400" fill="#a8b5b2">Auto</tspan><tspan font-weight="700" fill="url(#goldGrad)">TARGET</tspan>
+    </text>
+    <rect x="0" y="22" width="56" height="3" fill="#a23e8c"/>
+    <text x="0" y="80"
+          font-family="Inter, system-ui, sans-serif"
+          font-size="26" fill="#a8b5b2">
+      Modern action targeting for the WoW 3.3.5a client.
+    </text>
+  </g>
+
+  <text x="180" y="572"
+        font-family="'JetBrains Mono', monospace"
+        font-size="18" fill="#577277" letter-spacing="3">
+    v0.3.5 · MIT · ARMEDPROPHET13/MOD-AUTOTARGET
+  </text>
+</svg>

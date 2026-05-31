@@ -46,3 +46,18 @@ local.properties
 .loadpath
 .project
 .cproject
+
+#
+# AutoTarget client build artifacts
+#
+client/build/
+client/build_test/
+client/out/
+*.obj
+AutoTarget.log
+
+#
+# AutoTarget release packaging output. The zip and its sha256 are uploaded
+# directly to GitHub Releases - they are not committed to the source tree.
+#
+release/

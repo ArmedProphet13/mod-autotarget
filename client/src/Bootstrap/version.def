@@ -1,0 +1,26 @@
+; Export table for the AutoTarget version.dll proxy.
+;
+; WoW.exe statically imports a small subset of these (the GetFileVersionInfo
+; family) at process start, so naming our DLL version.dll and dropping it next
+; to WoW.exe gets us loaded via the normal DLL search order. The full Windows
+; version.dll surface is re-exported here so any other code in the process that
+; resolves a version.dll function by name continues to work; each export is
+; forwarded at runtime by ProxyExports.cpp.
+LIBRARY version
+EXPORTS
+    GetFileVersionInfoA
+    GetFileVersionInfoW
+    GetFileVersionInfoSizeA
+    GetFileVersionInfoSizeW
+    GetFileVersionInfoExA
+    GetFileVersionInfoExW
+    GetFileVersionInfoSizeExA
+    GetFileVersionInfoSizeExW
+    VerQueryValueA
+    VerQueryValueW
+    VerFindFileA
+    VerFindFileW
+    VerInstallFileA
+    VerInstallFileW
+    VerLanguageNameA
+    VerLanguageNameW

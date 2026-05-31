@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AutoTarget — action targeting for WoW 3.3.5a</title>
+  <meta name="description" content="A quality-of-life modification that introduces modern action targeting to the WoW 3.3.5a client. Your spells automatically direct toward the enemy you are facing.">
+  <meta name="theme-color" content="#090a14">
+
+  <!-- Open Graph / social -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AutoTarget — action targeting for WoW 3.3.5a">
+  <meta property="og:description" content="Modern action targeting for the WoW 3.3.5a client.">
+  <meta property="og:image" content="assets/og-image.svg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Fonts: Cinzel (display), Inter (body), JetBrains Mono (code) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="nav-sentinel" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <nav class="nav__links" aria-label="primary">
+    <a href="#what">What it is</a>
+    <a href="#see">See it work</a>
+    <a href="#install">Install</a>
+    <a href="#compat">Versions</a>
+    <a href="https://github.com/ArmedProphet13/mod-autotarget" class="nav__github" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- 1. Hero -->
+  <section class="hero" id="hero">
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <h1 class="hero__title">
+          <span class="hero__title-light">Auto</span><span class="hero__title-heavy">TARGET</span>
+        </h1>
+        <p class="hero__sub">
+          A quality-of-life modification that introduces modern action
+          targeting to the WoW 3.3.5a client. It automatically directs
+          your spells toward the enemy you are facing, eliminating the
+          need to manually cycle targets before casting.
+        </p>
+        <div class="hero__ctas">
+          <a class="btn btn--primary" href="https://github.com/ArmedProphet13/mod-autotarget/releases/latest" rel="noopener">
+            Download v0.3.5
+          </a>
+          <a class="btn btn--ghost" href="https://github.com/ArmedProphet13/mod-autotarget" rel="noopener">
+            View on GitHub
+          </a>
+        </div>
+      </div>
+
+      <figure class="media-well media-well--hero" data-media="hero-loop">
+        <div class="media-well__placeholder" aria-label="placeholder">
+          <div class="placeholder-ring" aria-hidden="true"></div>
+          <span>10-second loop coming</span>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- 2. What it is -->
+  <section class="section" id="what">
+    <div class="section__inner">
+      <p class="eyebrow">About</p>
+      <h2 class="section__title">Modern action targeting comes to the WoW 3.3.5a client</h2>
+      <div class="prose">
+        <p>
+          Legacy targeting mechanics require manual tabbing or clicking
+          before you can act, lagging behind modern standards. This
+          quality-of-life modification updates the system: simply face
+          your enemy and cast. Your spells automatically direct to the
+          target you are aiming at, while leaving normal targeting, unit
+          frames, and mouseover macros completely intact.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. See it work -->
+  <section class="section section--alt" id="see">
+    <div class="section__inner">
+      <p class="eyebrow">Features</p>
+      <h2 class="section__title">In Action</h2>
+
+      <div class="tabs" role="tablist" aria-label="Feature gallery">
+        <div class="tabs__buttons">
+          <button class="tab" role="tab" aria-selected="true" aria-controls="tab-1" id="tabbtn-1" data-tab="1">
+            <span class="tab__num">01</span>
+            <span class="tab__label">Aim-driven ring</span>
+          </button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-2" id="tabbtn-2" data-tab="2" tabindex="-1">
+            <span class="tab__num">02</span>
+            <span class="tab__label">Cast hand-off</span>
+          </button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-3" id="tabbtn-3" data-tab="3" tabindex="-1">
+            <span class="tab__num">03</span>
+            <span class="tab__label">SmartUnstick</span>
+          </button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="tab-4" id="tabbtn-4" data-tab="4" tabindex="-1">
+            <span class="tab__num">04</span>
+            <span class="tab__label">Cursor still wins</span>
+          </button>
+        </div>
+
+        <div class="tabs__panels">
+          <div class="tab-panel" role="tabpanel" id="tab-1" aria-labelledby="tabbtn-1" data-tab="1">
+            <figure class="media-well" data-media="feature-aim">
+              <div class="media-well__placeholder">
+                <div class="placeholder-ring" aria-hidden="true"></div>
+                <span>footage incoming</span>
+              </div>
+            </figure>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="tab-2" aria-labelledby="tabbtn-2" data-tab="2" hidden>
+            <figure class="media-well" data-media="feature-handoff">
+              <div class="media-well__placeholder">
+                <div class="placeholder-ring" aria-hidden="true"></div>
+                <span>footage incoming</span>
+              </div>
+              <figcaption>
+                Empty target slot, aim at a mob, press cast. The cast hook
+                hands the soft pick to the client a millisecond before the
+                no-target check. <code class="code--inline">/cast Fireball</code> just works.
+              </figcaption>
+            </figure>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="tab-3" aria-labelledby="tabbtn-3" data-tab="3" hidden>
+            <figure class="media-well" data-media="feature-unstick">
+              <div class="media-well__placeholder">
+                <div class="placeholder-ring" aria-hidden="true"></div>
+                <span>footage incoming</span>
+              </div>
+              <figcaption>
+                Kill a mob — slot clears, no 15-second corpse window. Run
+                past 40 yards — slot clears. Mob leashes back to spawn —
+                slot clears. The active target is never holding a GUID
+                you can't actually cast on.
+              </figcaption>
+            </figure>
+          </div>
+          <div class="tab-panel" role="tabpanel" id="tab-4" aria-labelledby="tabbtn-4" data-tab="4" hidden>
+            <figure class="media-well" data-media="feature-cursor">
+              <div class="media-well__placeholder">
+                <div class="placeholder-ring" aria-hidden="true"></div>
+                <span>footage incoming</span>
+              </div>
+              <figcaption>
+                Hover a party member with the cursor and cast
+                <code class="code--inline">[target=mouseover] Flash Heal</code> — the heal
+                lands on them, not on your aim pick. The mouseover writer
+                yields the frame the moment the cursor asserts a unit.
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Latest release -->
+  <section class="section" id="release">
+    <div class="section__inner">
+      <p class="eyebrow">Latest release</p>
+      <div class="release release--compact">
+        <div class="release__head">
+          <span class="tag tag--gold">v0.3.5</span>
+          <span class="release__date">latest</span>
+        </div>
+        <ul class="release__bullets">
+          <li>In-game checkbox in <em>Interface Options → Combat</em>. Toggle hotkey removed.</li>
+          <li><strong>SmartUnstick</strong> clears the target slot when it's holding a corpse, an out-of-range mob, or one you've turned away from.</li>
+          <li>Crash-safe — a bad memory address won't bring the game down.</li>
+        </ul>
+        <div class="release__ctas">
+          <a class="btn btn--primary" href="https://github.com/ArmedProphet13/mod-autotarget/releases/latest" rel="noopener">
+            Download v0.3.5
+          </a>
+          <a class="btn btn--link" href="https://github.com/ArmedProphet13/mod-autotarget/blob/main/CHANGELOG.md" rel="noopener">
+            Full changelog <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Install -->
+  <section class="section" id="install">
+    <div class="section__inner">
+      <p class="eyebrow">Install in 30 seconds</p>
+      <h2 class="section__title">Two files. One folder. One checkbox</h2>
+      <ol class="steps">
+        <li class="step">
+          <span class="step__num">01</span>
+          <h3 class="step__title">Copy the files into your WoW folder</h3>
+          <p class="step__body">
+            Extract <code class="code--inline">version.dll</code> and
+            <code class="code--inline">AutoTarget.ini</code> from the download
+            and place them in the same folder as
+            <code class="code--inline">Wow.exe</code> — the folder you launch
+            the game from.
+          </p>
+          <div class="code-block">
+            <pre><code id="installpath">C:\Path\To\WoW\</code></pre>
+            <button class="copy-btn" data-copy-target="installpath" aria-label="Copy install path">Copy</button>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num">02</span>
+          <h3 class="step__title">Start the game</h3>
+          <p class="step__body">
+            Open WoW and log into a character. The mod loads on its own —
+            nothing to install, no extra clicks.
+          </p>
+        </li>
+        <li class="step">
+          <span class="step__num">03</span>
+          <h3 class="step__title">Turn it on or off</h3>
+          <p class="step__body">
+            Open <em>Interface Options → Combat</em>. There's an
+            <kbd class="kbd">Enable AutoTarget</kbd> checkbox at the bottom
+            — it's on by default. Tick it off any time to disable, or type
+            <code class="code--inline">/at on</code> or
+            <code class="code--inline">/at off</code> in chat.
+          </p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 7. Compatibility -->
+  <section class="section section--alt" id="compat">
+    <div class="section__inner">
+      <p class="eyebrow">Compatibility</p>
+      <h2 class="section__title">Versions</h2>
+      <div class="table-wrap">
+        <table class="compat">
+          <thead>
+            <tr>
+              <th>Server / client</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">ChromieCraft</th>
+              <td><span class="status status--ok">Tested</span></td>
+            </tr>
+            <tr>
+              <th scope="row">AzerothCore-based servers</th>
+              <td><span class="status status--ok">Expected to work</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Warmane</th>
+              <td><span class="status status--warn">Untested</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Ascension</th>
+              <td><span class="status status--bad">Blocked</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Retail (Modern WoW)</th>
+              <td><span class="status status--planned">Future plan</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Classic Era · TBC Anniv. · WotLK Classic</th>
+              <td><span class="status status--planned">Future plan</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Credits & disclaimer -->
+  <section class="section section--alt" id="credits">
+    <div class="section__inner">
+      <p class="eyebrow">Credits &amp; disclaimer</p>
+      <div class="credits">
+        <p>
+          AutoTarget is a community project. World of Warcraft® is a
+          trademark of Blizzard Entertainment, Inc. This mod is not
+          affiliated with, endorsed by, or sponsored by Blizzard. It
+          modifies the client at runtime via in-process detours.
+        </p>
+        <p>
+          Built and tested on ChromieCraft. Thanks to the AzerothCore
+          community for the protocol documentation that made the
+          descriptor offsets verifiable, and to everyone who's filed bug
+          reports while live-fire testing.
+        </p>
+        <p class="credits__license">
+          <span class="tag">MIT</span>
+          <span>Use it. Fork it. Ship something better.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer__inner">
+    <div class="footer__left">AutoTarget v0.3.5 · MIT</div>
+    <div class="footer__right">
+      <a href="https://github.com/ArmedProphet13/mod-autotarget" rel="noopener">GitHub ↗</a>
+      <a href="https://github.com/ArmedProphet13/mod-autotarget/blob/main/CHANGELOG.md" rel="noopener">Changelog ↗</a>
+      <a href="https://github.com/ArmedProphet13/mod-autotarget/issues" rel="noopener">Report an issue ↗</a>
+    </div>
+  </div>
+</footer>
+
+<script src="script.js" defer></script>
+</body>
+</html>
