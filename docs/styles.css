@@ -730,44 +730,17 @@ body.scrolled .nav__logo { height: 26px; }
   border-color: var(--accent-gold);
 }
 
-/* ---- Safety section ------------------------------------------------------ */
+/* ---- Prose subheads (used inside .prose for in-section subsections) ------ */
 
-.safety {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--sp-4);
-}
-@media (max-width: 920px) {
-  .safety { grid-template-columns: 1fr; }
-}
-.safety__card {
-  background: var(--bg-page);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: var(--sp-5);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-3);
-}
-.safety__heading {
+.prose__subhead {
   font-size: var(--fs-lg);
-  margin: 0 0 var(--sp-2);
   letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: var(--sp-5) 0 var(--sp-3);
 }
-.safety__card p {
-  margin: 0;
-  color: var(--text-secondary);
-  font-size: var(--fs-sm);
-  line-height: 1.65;
-}
-.safety__card p code { color: var(--text-primary); }
-.safety__card a {
-  color: var(--accent-steel);
-  text-decoration: underline;
-  text-decoration-color: rgba(115, 190, 211, 0.3);
-  text-underline-offset: 3px;
-}
-.safety__card a:hover { color: var(--accent-steel-hover); }
+.prose__subhead:first-child { margin-top: 0; }
+
+.prose .code-block { margin: var(--sp-3) 0; }
 
 /* ---- Compatibility table ------------------------------------------------- */
 
