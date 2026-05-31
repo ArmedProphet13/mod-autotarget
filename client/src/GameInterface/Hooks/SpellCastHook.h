@@ -4,7 +4,7 @@
 
 namespace autotarget {
 
-class AutoTargetController;
+class ITargetingOracle;
 
 // Hooks the client's Spell_C_CastSpell so AutoTarget can inject the engine's
 // soft pick as the hard target *before* the client's no-target check runs.
@@ -21,7 +21,7 @@ class AutoTargetController;
 // writer that v0.1 shipped with).
 class SpellCastHook {
 public:
-    static bool Install(AutoTargetController* controller);
+    static bool Install(ITargetingOracle* oracle);
     static void Uninstall();
 
 private:

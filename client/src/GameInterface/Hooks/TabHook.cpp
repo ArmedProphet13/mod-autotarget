@@ -9,7 +9,7 @@
 #include "GameInterface/Hooks/SelectionHook.h"
 #include "GameInterface/Offsets.h"
 #include "GameInterface/Selection.h"
-#include "Orchestration/AutoTargetController.h"
+#include "Interfaces/ITargetingOracle.h"
 
 namespace autotarget {
 
@@ -24,15 +24,15 @@ using TabFn = void (*)();
 
 TabFn                 g_original   = nullptr;
 void*                 g_addr       = nullptr;
-AutoTargetController* g_controller = nullptr;
+ITargetingOracle*     g_oracle     = nullptr;
 
 void HookedTab() {
-    if (g_controller == nullptr || !g_controller->CanCommit()) {
+    if (g_oracle == nullptr || !g_oracle->CanCommit()) {
         g_original();
         return;
     }
 
-    const Guid soft = g_controller->SoftTarget();
+    const Guid soft = g_oracle->SoftTarget();
     if (soft == kNoGuid) {
         // No aim pick - fall through to the native proximity cycle so Tab
         // never does *less* than it did before AutoTarget was installed.
@@ -54,28 +54,28 @@ void HookedTab() {
 
 } // namespace
 
-bool TabHook::Install(AutoTargetController* controller) {
-    if (controller == nullptr) {
-        AT_LOG_ERROR("TabHook: null controller");
+bool TabHook::Install(ITargetingOracle* oracle) {
+    if (oracle == nullptr) {
+        AT_LOG_ERROR("TabHook: null oracle");
         return false;
     }
     if (offsets::kFnTargetNearestEnemy == 0) {
         AT_LOG_WARN("TabHook: kFnTargetNearestEnemy is 0 - skipping");
         return false;
     }
-    g_controller = controller;
+    g_oracle = oracle;
     g_addr = reinterpret_cast<void*>(offsets::kFnTargetNearestEnemy);
 
     if (MH_CreateHook(g_addr, &HookedTab,
                       reinterpret_cast<void**>(&g_original)) != MH_OK) {
         AT_LOG_ERROR("TabHook: MH_CreateHook failed (kFnTargetNearestEnemy "
                      "may be wrong; Tab keeps native behaviour)");
-        g_controller = nullptr;
+        g_oracle = nullptr;
         return false;
     }
     if (MH_EnableHook(g_addr) != MH_OK) {
         AT_LOG_ERROR("TabHook: MH_EnableHook failed");
-        g_controller = nullptr;
+        g_oracle = nullptr;
         return false;
     }
 
@@ -84,7 +84,7 @@ bool TabHook::Install(AutoTargetController* controller) {
 }
 
 void TabHook::Uninstall() {
-    g_controller = nullptr;
+    g_oracle = nullptr;
 }
 
 } // namespace autotarget

@@ -2,7 +2,7 @@
 
 namespace autotarget {
 
-class AutoTargetController;
+class ITargetingOracle;
 
 // Hooks the client's native Tab handler (TargetNearestEnemy).
 //
@@ -20,7 +20,7 @@ class AutoTargetController;
 // hook silently does nothing - Tab keeps its native cycle behaviour.
 class TabHook {
 public:
-    static bool Install(AutoTargetController* controller);
+    static bool Install(ITargetingOracle* oracle);
     static void Uninstall();
 
 private:

@@ -141,6 +141,8 @@ bool ConfigManager::Load(const std::string& iniPath) {
         cfg_.smartUnstick = ParseBool(*v, cfg_.smartUnstick);
     if (auto* v = get("behaviour.smartunstickmaxrangeyards"))
         cfg_.smartUnstickMaxRangeYards = ParseFloat(*v, cfg_.smartUnstickMaxRangeYards);
+    if (auto* v = get("behaviour.lineofsightchecks"))
+        cfg_.lineOfSightChecks = ParseBool(*v, cfg_.lineOfSightChecks);
 
     // [input] section removed in v0.3.5 - the toggle hotkey is gone. Toggle
     // AutoTarget via the in-game checkbox in Interface Options > Combat, or

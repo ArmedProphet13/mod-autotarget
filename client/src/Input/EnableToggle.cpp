@@ -4,24 +4,24 @@
 
 #include "Diagnostics/Logger.h"
 #include "GameInterface/FrameScript.h"
-#include "Orchestration/AutoTargetController.h"
+#include "Interfaces/IToggleTarget.h"
 
 namespace autotarget {
 
 namespace {
 
-AutoTargetController* g_controller = nullptr;
+IToggleTarget* g_toggle = nullptr;
 
 // Lua C functions: argument-free by design, so no lua_to* offsets are needed.
 int __cdecl LuaEnable(void* /*L*/) {
-    if (g_controller)
-        g_controller->SetEnabled(true);
+    if (g_toggle)
+        g_toggle->SetEnabled(true);
     return 0;
 }
 
 int __cdecl LuaDisable(void* /*L*/) {
-    if (g_controller)
-        g_controller->SetEnabled(false);
+    if (g_toggle)
+        g_toggle->SetEnabled(false);
     return 0;
 }
 
@@ -85,8 +85,8 @@ end
 
 } // namespace
 
-bool EnableToggle::Install(AutoTargetController* controller) {
-    g_controller = controller;
+bool EnableToggle::Install(IToggleTarget* toggle) {
+    g_toggle = toggle;
 
     const bool bridge =
         FrameScript::RegisterFunction("AutoTarget_NativeEnable", &LuaEnable) &&
@@ -103,7 +103,7 @@ bool EnableToggle::Install(AutoTargetController* controller) {
         return false;
     }
 
-    const bool enabled = controller != nullptr && controller->IsEnabled();
+    const bool enabled = toggle != nullptr && toggle->IsEnabled();
     FrameScript::Execute(BuildUiLua(enabled).c_str());
     AT_LOG_INFO("EnableToggle: in-game checkbox and /at command installed");
     return true;

@@ -17,10 +17,16 @@
 
 using namespace autotarget;
 
-namespace {
-
+// Shared counters — non-anonymous so other test TUs (MechanismHandlerTests,
+// ToggleManagerTests) can extern them and contribute to one summary.
 int g_pass = 0;
 int g_fail = 0;
+
+// Forward decls for the runners defined in sibling test TUs.
+void RunMechanismHandlerTests();
+void RunToggleManagerTests();
+
+namespace {
 
 #define CHECK(cond)                                                            \
     do {                                                                       \
@@ -420,6 +426,9 @@ int main() {
     Test_Unstick_BehindButFarSoft();
     Test_Unstick_BehindNoSoft();
     Test_Unstick_LightSkipsHeavy();
+
+    RunToggleManagerTests();
+    RunMechanismHandlerTests();
 
     std::printf("\n%d passed, %d failed\n", g_pass, g_fail);
     return g_fail == 0 ? 0 : 1;

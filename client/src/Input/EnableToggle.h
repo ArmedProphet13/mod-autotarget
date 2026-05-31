@@ -2,7 +2,7 @@
 
 namespace autotarget {
 
-class AutoTargetController;
+class IToggleTarget;
 
 // Installs the in-game on/off controls: the "Enable AutoTarget" checkbox in
 // Interface Options > Combat and the /at (/autotarget) chat command. Both drive
@@ -17,7 +17,7 @@ public:
     // Runs on the game thread (frame callback), once, after FrameXML has loaded.
     // Returns true if the in-game UI (checkbox + /at command) was installed;
     // false if the native bridge offset is unset and only the hotkey is live.
-    static bool Install(AutoTargetController* controller);
+    static bool Install(IToggleTarget* toggle);
 
     // Reflects a native-side toggle (hotkey) back into the Lua UI so the
     // checkbox stays in sync. Safe to call from the frame callback.

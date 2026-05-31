@@ -83,14 +83,21 @@ set_target_properties(autotarget PROPERTIES
     PREFIX ""
 )
 
-# --- Engine unit tests (pure logic, off-client) -----------------------------
-# The engine layer depends on nothing but the standard library, so the test
-# executable compiles those sources alone - no client, no MinHook, no Windows.
+# --- Engine + handler unit tests (pure logic, off-client) -------------------
+# The engine layer + mechanism handlers + ToggleManager depend on nothing but
+# the standard library + the in-process Logger/FrameScript free functions (we
+# stub the latter two below). No MinHook, no Windows.
 file(GLOB ENGINE_SOURCES CONFIGURE_DEPENDS src/Engine/*.cpp)
+file(GLOB MECHANISM_SOURCES CONFIGURE_DEPENDS src/Engine/Mechanisms/*.cpp)
 
 add_executable(autotarget_tests
     ${ENGINE_SOURCES}
+    ${MECHANISM_SOURCES}
+    src/Orchestration/ToggleManager.cpp
     tests/EngineTests.cpp
+    tests/MechanismHandlerTests.cpp
+    tests/ToggleManagerTests.cpp
+    tests/TestStubs.cpp
 )
 target_include_directories(autotarget_tests PRIVATE src)
 

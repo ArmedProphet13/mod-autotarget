@@ -117,6 +117,33 @@ constexpr std::uintptr_t kFnSpellCastSpell = 0x0080DA40;
 // the call entirely and keep raw-write-only behaviour.
 constexpr std::uintptr_t kFnSetMouseover = 0x004F62E0;
 
+// CWorld::Intersect(start, end, hitOut, distOut, flags): the client's terrain /
+// WMO / doodad ray tracer. This is the routine the client itself uses to gate
+// "Target not in line of sight" before a cast. AutoTarget calls it (tick-only,
+// never on the cast hook) to drop occluded enemies from candidate scoring and
+// to activate the SmartUnstick OutOfLoS reason.
+//
+// Signature:  char __cdecl Intersect(const C3Vector* start, const C3Vector* end,
+//                                     C3Vector* hitOut, float* distOut,
+//                                     unsigned int flags);
+//   - C3Vector is three contiguous floats {x, y, z} (z = up), matching our unit
+//     position read order at kUnitPosX/Y/ZOffset.
+//   - distOut is in/out: initialise to 1.0f; on a hit it is the [0,1] fraction
+//     along the segment where geometry was struck. hitOut may be null.
+//   - RETURN IS INVERTED: nonzero (1) means the ray HIT geometry (blocked / NOT
+//     in line of sight); zero means the segment is clear (in line of sight).
+//
+// [VERIFY] - the offset is stable across public 12340 references; the flag
+// bitmask below is the part most likely to need an in-client tweak. The call is
+// SEH-wrapped in LineOfSight.cpp and latches off on first fault, falling back to
+// the permissive (always-visible) behaviour, so a wrong value cannot crash or
+// regress targeting.
+constexpr std::uintptr_t kFnWorldIntersect = 0x007A3B70;
+
+// Collision mask for a line-of-sight trace: terrain + WMO (buildings) + M2
+// (doodads). The widely-cited LoS combination for 12340. [VERIFY] in-client.
+constexpr unsigned int kLosTraceFlags = 0x00100171;
+
 // TargetNearestEnemy: the native Tab handler. AutoTarget detours this so
 // Tab targets the engine's aim pick (the visible mouseover ring) instead of
 // cycling enemies by client-side proximity. If MinHook install fails Tab

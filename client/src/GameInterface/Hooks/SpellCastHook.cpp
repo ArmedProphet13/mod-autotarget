@@ -10,7 +10,7 @@
 #include "GameInterface/Hooks/SelectionHook.h"
 #include "GameInterface/Offsets.h"
 #include "GameInterface/Selection.h"
-#include "Orchestration/AutoTargetController.h"
+#include "Interfaces/ITargetingOracle.h"
 
 namespace autotarget {
 
@@ -26,23 +26,23 @@ using CastSpellFn = int (__cdecl*)(int spellId,
 
 CastSpellFn           g_original   = nullptr;
 void*                 g_addr       = nullptr;
-AutoTargetController* g_controller = nullptr;
+ITargetingOracle*     g_oracle     = nullptr;
 
 int __cdecl HookedCastSpell(int spellId,
                             int unused,
                             std::uint64_t targetGuid,
                             char unk) {
-    if (g_controller == nullptr || !g_controller->CanCommit())
+    if (g_oracle == nullptr || !g_oracle->CanCommit())
         return g_original(spellId, unused, targetGuid, unk);
 
-    const Guid soft = g_controller->SoftTarget();
+    const Guid soft = g_oracle->SoftTarget();
 
     // If the active target slot points to a unit that's unusable RIGHT NOW
     // (corpse, despawned, out of cast range, server-leashed) treat the slot
     // as empty for the commit decision. This is the cast-time fast-path of
     // SmartUnstick - the tick-time path clears the slot proactively, but the
     // ~70ms gap between ticks can leave a stale GUID; this catches that.
-    const bool unusable = g_controller->IsActiveTargetUnusableCheap(targetGuid);
+    const bool unusable = g_oracle->IsActiveTargetUnusableCheap(targetGuid);
     const Guid effectiveIncoming = unusable ? kNoGuid : targetGuid;
 
     if (!ShouldCommitSpellTarget(spellId, effectiveIncoming, soft)) {
@@ -77,27 +77,27 @@ int __cdecl HookedCastSpell(int spellId,
 
 } // namespace
 
-bool SpellCastHook::Install(AutoTargetController* controller) {
-    if (controller == nullptr) {
-        AT_LOG_ERROR("SpellCastHook: null controller");
+bool SpellCastHook::Install(ITargetingOracle* oracle) {
+    if (oracle == nullptr) {
+        AT_LOG_ERROR("SpellCastHook: null oracle");
         return false;
     }
     if (offsets::kFnSpellCastSpell == 0) {
         AT_LOG_WARN("SpellCastHook: kFnSpellCastSpell is 0 - skipping");
         return false;
     }
-    g_controller = controller;
+    g_oracle = oracle;
     g_addr = reinterpret_cast<void*>(offsets::kFnSpellCastSpell);
 
     if (MH_CreateHook(g_addr, &HookedCastSpell,
                       reinterpret_cast<void**>(&g_original)) != MH_OK) {
         AT_LOG_ERROR("SpellCastHook: MH_CreateHook failed");
-        g_controller = nullptr;
+        g_oracle = nullptr;
         return false;
     }
     if (MH_EnableHook(g_addr) != MH_OK) {
         AT_LOG_ERROR("SpellCastHook: MH_EnableHook failed");
-        g_controller = nullptr;
+        g_oracle = nullptr;
         return false;
     }
 
@@ -106,7 +106,7 @@ bool SpellCastHook::Install(AutoTargetController* controller) {
 }
 
 void SpellCastHook::Uninstall() {
-    g_controller = nullptr;
+    g_oracle = nullptr;
 }
 
 } // namespace autotarget

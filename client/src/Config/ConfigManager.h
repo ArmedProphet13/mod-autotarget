@@ -72,6 +72,15 @@ struct Config {
     bool  smartUnstick              = true;
     float smartUnstickMaxRangeYards = 40.0f; // WoW hard cap for any cast
 
+    // Native line-of-sight checks (CWorld::Intersect). When on, occluded
+    // enemies are dropped from candidate scoring and the SmartUnstick
+    // OutOfLoS reason can fire. Default OFF: the trace offset is confirmed but
+    // the collision-flag bitmask is single-source and wants in-client
+    // verification before being trusted. A wrong value can only over-exclude
+    // (never crash - the call is SEH-wrapped and latches off on fault), but
+    // off-by-default keeps first-run behaviour identical to the v1 no-op.
+    bool lineOfSightChecks = false;
+
 };
 
 // Loads and parses AutoTarget.ini.
