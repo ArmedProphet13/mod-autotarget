@@ -18,12 +18,23 @@ struct C3Vector {
     float z;
 };
 
-// char __cdecl CWorld::Intersect(start, end, hitOut, distOut, flags)
-using IntersectFn = char(__cdecl*)(const C3Vector* start,
+// bool __cdecl TraceLine(start, end, outHitPoint, outHitFraction, flags, pCallbackData)
+//
+// Verified against a working 3.3.5a/12340 line-of-sight implementation
+// (AzDeltaQQ/WorldToScreenTesting). Two details are mandatory or the client
+// crashes: there are SIX parameters (the trailing void* callback, passed
+// nullptr), and outHitPoint MUST be a valid non-null pointer - the function
+// writes the hit location through it unconditionally. Passing only five args
+// or a null hit pointer makes the callee read a garbage stack slot / write
+// through null, which corrupts memory and faults later (e.g. on exit).
+//
+// Returns true when the segment is BLOCKED (hit geometry); false when CLEAR.
+using IntersectFn = bool(__cdecl*)(const C3Vector* start,
                                    const C3Vector* end,
-                                   C3Vector*       hitOut,
-                                   float*          distOut,
-                                   unsigned int    flags);
+                                   C3Vector*       outHitPoint,
+                                   float*          outHitFraction,
+                                   unsigned int    flags,
+                                   void*           pCallbackData);
 
 // Eye/chest height raise (yards). Tracing foot-to-foot false-positives on
 // ground slopes and the target's own model base; raising both endpoints to
@@ -40,11 +51,14 @@ bool TraceClear(const WoWUnit& from, const WoWUnit& to) {
     const C3Vector end{to.X(), to.Y(), to.Z() + kEyeHeight};
 
     const auto fn = reinterpret_cast<IntersectFn>(offsets::kFnWorldIntersect);
-    float dist = 1.0f; // in/out: fraction along the segment
-    // Intersect returns nonzero when the ray HITS geometry (blocked), so the
-    // segment is clear exactly when it returns zero.
-    const char hit = fn(&start, &end, nullptr, &dist, offsets::kLosTraceFlags);
-    return hit == 0;
+    C3Vector hitPoint{};   // MUST be non-null: the function writes the hit here.
+    float    fraction = 1.0f; // in/out: [0,1] fraction along the segment on a hit.
+    // Returns true when the ray HITS geometry (blocked); the segment is clear
+    // exactly when it returns false. The trailing nullptr is the optional
+    // callback-data pointer (6th arg) - omitting it is what corrupted the stack.
+    const bool blocked = fn(&start, &end, &hitPoint, &fraction,
+                            offsets::kLosTraceFlags, nullptr);
+    return !blocked;
 }
 
 } // namespace

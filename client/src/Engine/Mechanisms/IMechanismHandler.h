@@ -11,6 +11,7 @@ namespace autotarget {
 struct MechanismCtx {
     Guid softTarget;
     Guid lastWrittenMouseover;
+    PickKind softKind = PickKind::Hostile; // what softTarget is; Hostile today
     bool enabled;
     bool diagnostic;
 };

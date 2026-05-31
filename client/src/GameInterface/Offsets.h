@@ -123,26 +123,31 @@ constexpr std::uintptr_t kFnSetMouseover = 0x004F62E0;
 // never on the cast hook) to drop occluded enemies from candidate scoring and
 // to activate the SmartUnstick OutOfLoS reason.
 //
-// Signature:  char __cdecl Intersect(const C3Vector* start, const C3Vector* end,
-//                                     C3Vector* hitOut, float* distOut,
-//                                     unsigned int flags);
+// Signature [CONFIRMED against a working 12340 LoS implementation,
+// AzDeltaQQ/WorldToScreenTesting]:
+//
+//   bool __cdecl TraceLine(const C3Vector* start, const C3Vector* end,
+//                          C3Vector* outHitPoint, float* outHitFraction,
+//                          unsigned int flags, void* pCallbackData);
+//
 //   - C3Vector is three contiguous floats {x, y, z} (z = up), matching our unit
 //     position read order at kUnitPosX/Y/ZOffset.
-//   - distOut is in/out: initialise to 1.0f; on a hit it is the [0,1] fraction
-//     along the segment where geometry was struck. hitOut may be null.
-//   - RETURN IS INVERTED: nonzero (1) means the ray HIT geometry (blocked / NOT
-//     in line of sight); zero means the segment is clear (in line of sight).
-//
-// [VERIFY] - the offset is stable across public 12340 references; the flag
-// bitmask below is the part most likely to need an in-client tweak. The call is
-// SEH-wrapped in LineOfSight.cpp and latches off on first fault, falling back to
-// the permissive (always-visible) behaviour, so a wrong value cannot crash or
-// regress targeting.
+//   - outHitPoint MUST be a valid non-null pointer: the function writes the hit
+//     location through it. Passing null faults.
+//   - outHitFraction is in/out: initialise to 1.0f; on a hit it is the [0,1]
+//     fraction along the segment where geometry was struck.
+//   - pCallbackData is an optional trailing pointer - pass nullptr. There are
+//     SIX parameters; calling with five makes the callee read a garbage stack
+//     slot and corrupt memory (delayed crash, e.g. on exit).
+//   - RETURN: true (AL=1) means the ray HIT geometry (blocked / NOT in line of
+//     sight); false (AL=0) means the segment is clear (in line of sight).
 constexpr std::uintptr_t kFnWorldIntersect = 0x007A3B70;
 
-// Collision mask for a line-of-sight trace: terrain + WMO (buildings) + M2
-// (doodads). The widely-cited LoS combination for 12340. [VERIFY] in-client.
-constexpr unsigned int kLosTraceFlags = 0x00100171;
+// Collision mask for a line-of-sight trace (LOS_FLAG_ALL_ENCOMPASSING in the
+// reference implementation): the proven 12340 LoS combination. Earlier we
+// shipped 0x00100171, which was a guess; 0x00100011 is the value from working
+// code.
+constexpr unsigned int kLosTraceFlags = 0x00100011;
 
 // TargetNearestEnemy: the native Tab handler. AutoTarget detours this so
 // Tab targets the engine's aim pick (the visible mouseover ring) instead of

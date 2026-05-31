@@ -1,11 +1,23 @@
 #pragma once
 
+#include <cstdint>
+
 #include "Engine/EngineTypes.h"
 
 namespace autotarget {
 
 // Reads and writes the player's hard target through the client's own routine.
 namespace Selection {
+
+// Overrides the CGGameUI::Set_Mouseover address used for the native tooltip +
+// highlight call. INI-driven so candidate offsets can be probed in-client
+// without a rebuild. Pass 0 to disable the native call (raw slot write only).
+// Call before the first SetMouseover (TickCoordinator ctor).
+void SetMouseoverOffset(std::uintptr_t addr);
+
+// Enables the Tier-2 fallback: after the raw slot write, drive the game's own
+// GameTooltip via Lua (GameTooltip:SetUnit("mouseover")). Tooltip only, no ring.
+void SetTooltipViaLua(bool on);
 
 // The player's current hard target (kNoGuid if none).
 Guid CurrentTarget();

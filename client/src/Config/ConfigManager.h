@@ -5,6 +5,7 @@
 
 #include "Diagnostics/Logger.h"
 #include "Engine/EngineTypes.h"
+#include "GameInterface/Offsets.h"
 
 namespace autotarget {
 
@@ -81,6 +82,24 @@ struct Config {
     // off-by-default keeps first-run behaviour identical to the v1 no-op.
     bool lineOfSightChecks = false;
 
+    // [advanced] Native tooltip + highlight probe.
+    //
+    // setMouseoverOffset: the candidate address of CGGameUI::Set_Mouseover -
+    // the routine that, unlike a raw write to the mouseover GUID slot, also
+    // opens the unit tooltip and lights the selection-ring highlight. This is
+    // a single-source [VERIFY] offset that must be confirmed in-client; making
+    // it INI-driven lets the user walk candidate addresses without a rebuild.
+    // 0 disables the native call (raw slot write only). Defaults to the value
+    // in Offsets.h (kFnSetMouseover).
+    // Defaults to the Offsets.h address; INI sets a candidate to probe, or 0
+    // to disable the native call entirely (raw slot write only).
+    std::uintptr_t setMouseoverOffset = offsets::kFnSetMouseover;
+
+    // tooltipViaLua: Tier-2 fallback. When the native routine above won't bind
+    // on any candidate, drive the game's own shared GameTooltip via Lua
+    // (GameTooltip:SetUnit("mouseover")). Addon-compatible, can't break on
+    // edge-case mobs, but gives the tooltip only - not the world highlight ring.
+    bool tooltipViaLua = false;
 };
 
 // Loads and parses AutoTarget.ini.

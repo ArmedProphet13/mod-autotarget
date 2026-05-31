@@ -144,6 +144,13 @@ bool ConfigManager::Load(const std::string& iniPath) {
     if (auto* v = get("behaviour.lineofsightchecks"))
         cfg_.lineOfSightChecks = ParseBool(*v, cfg_.lineOfSightChecks);
 
+    // [advanced] native tooltip + highlight probe (hex offset, base-0 parse).
+    if (auto* v = get("advanced.setmouseoveroffset"))
+        cfg_.setMouseoverOffset =
+            static_cast<std::uintptr_t>(ParseLong(*v, static_cast<long>(cfg_.setMouseoverOffset)));
+    if (auto* v = get("advanced.tooltipvialua"))
+        cfg_.tooltipViaLua = ParseBool(*v, cfg_.tooltipViaLua);
+
     // [input] section removed in v0.3.5 - the toggle hotkey is gone. Toggle
     // AutoTarget via the in-game checkbox in Interface Options > Combat, or
     // the /at chat command.

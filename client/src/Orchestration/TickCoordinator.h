@@ -59,6 +59,7 @@ private:
     bool          inWorld_ = false;
     Guid          lastWrittenMouseover_ = kNoGuid;
     Guid          softTarget_ = kNoGuid;
+    PickKind      softKind_ = PickKind::Hostile; // kind of softTarget_; Hostile today
 
     std::uint32_t tickIntervalMs_;
     std::uint32_t lastTickMs_ = 0;

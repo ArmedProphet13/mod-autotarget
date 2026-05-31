@@ -47,6 +47,8 @@ TickCoordinator::TickCoordinator(const ConfigManager& config,
       ignoreCritters_(config.Get().ignoreCritters),
       tickIntervalMs_(config.Get().tickRateMs) {
     LineOfSight::SetEnabled(cfg_.lineOfSightChecks);
+    Selection::SetMouseoverOffset(cfg_.setMouseoverOffset);
+    Selection::SetTooltipViaLua(cfg_.tooltipViaLua);
 }
 
 void TickCoordinator::ApplyConfig(const ConfigManager& config) {
@@ -54,6 +56,8 @@ void TickCoordinator::ApplyConfig(const ConfigManager& config) {
     engine_.SetConfig(config.ToEngineConfig());
     tickIntervalMs_ = cfg_.tickRateMs;
     LineOfSight::SetEnabled(cfg_.lineOfSightChecks);
+    Selection::SetMouseoverOffset(cfg_.setMouseoverOffset);
+    Selection::SetTooltipViaLua(cfg_.tooltipViaLua);
 }
 
 bool TickCoordinator::IsActiveTargetUnusableCheap(Guid guid) {
@@ -88,7 +92,7 @@ void TickCoordinator::OnFrame() {
 
     // Per-frame mechanism writes (cursor-yield mouseover for ActionTarget,
     // unconditional re-pin for legacy Mouseover, no-op for HardTarget).
-    MechanismCtx ctx{softTarget_, lastWrittenMouseover_,
+    MechanismCtx ctx{softTarget_, lastWrittenMouseover_, softKind_,
                      toggle_.IsEnabled(), diagnostic_};
     handler_->OnFrame(ctx);
     lastWrittenMouseover_ = ctx.lastWrittenMouseover;
@@ -163,6 +167,7 @@ void TickCoordinator::Tick() {
 
     const TargetingDecision decision = engine_.Evaluate(snap);
     softTarget_ = decision.softTarget;
+    softKind_   = decision.softKind;
 
     // SmartUnstick (v0.3.4) - see AutoTargetController history for the rationale.
     if (!diagnostic_ && toggle_.IsEnabled() && snap.currentTarget != kNoGuid) {
@@ -249,7 +254,7 @@ void TickCoordinator::Tick() {
 
     // Mechanism-specific write decisions live in the strategy. Pass through
     // the live ctx so MouseoverHandler can update lastWrittenMouseover_.
-    MechanismCtx ctx{softTarget_, lastWrittenMouseover_,
+    MechanismCtx ctx{softTarget_, lastWrittenMouseover_, softKind_,
                      toggle_.IsEnabled(), diagnostic_};
     handler_->OnTickResult(ctx, decision);
     lastWrittenMouseover_ = ctx.lastWrittenMouseover;

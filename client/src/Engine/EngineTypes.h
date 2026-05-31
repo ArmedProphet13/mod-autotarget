@@ -78,11 +78,24 @@ enum class DecisionKind {
     SetHardTarget
 };
 
+// What sort of thing the soft pick is. Today the engine only ever emits
+// Hostile (the candidate scan keeps only attackable units), but every
+// downstream consumer - mouseover write, cast handoff, tooltip - carries this
+// tag so a future "interaction" module can add Friendly (right-click unit
+// menu) and Object (use/interact) picks as new enum values + handlers without
+// re-threading the spine. Keep it kind-agnostic: never assume "enemy".
+enum class PickKind {
+    Hostile,   // attackable unit - the only kind shipped today
+    Friendly,  // friendly/neutral player or NPC (future: unit menu)
+    Object     // GameObject - chest, lever, herb, quest box (future: interact)
+};
+
 // Immutable per-tick output of the engine.
 struct TargetingDecision {
     DecisionKind kind = DecisionKind::NoChange;
     Guid hardTarget = kNoGuid;  // meaningful when kind == SetHardTarget
     Guid softTarget = kNoGuid;  // always set: best candidate (diagnostics / commit-on-action)
+    PickKind softKind = PickKind::Hostile; // what the soft pick is (always Hostile today)
     const char* reason = "idle";
 };
 
